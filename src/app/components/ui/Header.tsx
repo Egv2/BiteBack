@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Inventory from "./Inventory";
 import { useI18n } from "@/app/i18n";
+import Logo from "./Logo";
 
 interface HeaderProps {
   toggleInventory: () => void;
@@ -36,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({
   React.useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      console.log("Window resized to:", window.innerWidth);
     };
 
     window.addEventListener("resize", handleResize);
@@ -45,9 +47,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="bg-gray-900 border-b border-gray-800 py-2 px-4 flex justify-between items-center">
       <div className="flex items-center">
-        <h1 className="text-lg font-bold text-[#00b4d8] drop-shadow-glow md:text-xl">
-          {t("app.title")}
-        </h1>
+        <Logo size={windowWidth < 768 ? "sm" : "md"} />
 
         {/* Mobilde yer kazanmak için konum bilgisini sadece desktop'ta göster */}
         {windowWidth >= 768 && (
