@@ -22,21 +22,25 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/app/i18n";
 
-const HelpModal: React.FC = () => {
+interface HelpModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
   const { t } = useI18n();
-  const [isOpen, setIsOpen] = useState(false);
 
   // ESC ile kapatma
   useEffect(() => {
     const handleEscKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
+        onClose();
       }
     };
 
     window.addEventListener("keydown", handleEscKey);
     return () => window.removeEventListener("keydown", handleEscKey);
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   // Modalı kilitleme
   useEffect(() => {
@@ -53,7 +57,7 @@ const HelpModal: React.FC = () => {
 
   // Kapatma fonksiyonu
   const handleClose = () => {
-    setIsOpen(false);
+    onClose();
     if (process.env.NODE_ENV === "development") {
       console.log("Help modal closed by user");
     }
@@ -63,7 +67,7 @@ const HelpModal: React.FC = () => {
     <>
       <button
         className="fixed bottom-4 right-4 z-50 rounded-full glass-button w-12 h-12 flex items-center justify-center text-[#00b4d8] shadow-lg hover:scale-105 transition-transform"
-        onClick={() => setIsOpen(true)}
+        onClick={() => onClose()}
         aria-label="Yardım"
       >
         <FontAwesomeIcon icon={faQuestionCircle} className="text-xl" />
