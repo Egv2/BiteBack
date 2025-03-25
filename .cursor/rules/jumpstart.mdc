@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+I want you to help me create a frontend demo for a simple web game called "BiteBack" using React, Leaflet.js, and OpenStreetMap (OSM). The game is designed to simulate survival coordination in a zombie outbreak, inspired by scenarios in countries under crisis (e.g., Ukraine or Turkey), while keeping it light, responsive, and mobile-friendly due to expected high mobile traffic. It’s a fun, minimalist game for a good cause—think of it as a creative way to engage people in coordination mechanics. Here’s what the demo should include:
+
+1. **Map Interface**:
+   - Use Leaflet.js with OpenStreetMap as the base layer.
+   - Display a map centered on Istanbul, Turkey (coordinates: 41.0082° N, 28.9784° E, zoom level 10). Players can select any Turkish city from a dropdown or manually enter coordinates; optionally, ask for the player’s location (mocked for demo).
+   - Allow players to add markers by clicking the map: red pins for zombie sightings (replacing police) and green pins for survivor camps (replacing protest locations).
+   - Markers show popups with details (e.g., "Zombie Sighting" or "Survivor Camp - Votes: 5/10, EXP: 50").
+   - Include a button to toggle a "Safe Camps" layer, showing only approved survivor camps (approved if votes exceed 70%).
+   - Add simple purple pins for traffic hotspots (representing survivor movement), visible on the map.
+   - Use "Glass Morphism" design style. 
+
+2. **Anonymous Chat Section**:
+   - Add a chat UI on the right side (30% width), simulating a Matrix-based survivor comms network.
+   - Include a dropdown to select chat rooms by city (e.g., Istanbul, Ankara, Izmir).
+   - Display mock messages: normal messages (e.g., "Meet at Taksim safe zone, 5 PM") and emergency calls (e.g., "!help Zombies near Galata, need backup!").
+   - Highlight emergency messages in red and pin them to the top of the chat.
+   - Players send messages anonymously (no login, just a temp ID like "Survivor123").
+   - Add a "Vote" button with a thumbs-up icon next to survivor camp proposals (e.g., "Safe camp at Taksim?") showing vote count (e.g., "5/10"). Voting earns 10 EXP per vote.
+
+3. **Emergency Call Feature**:
+   - Add an "SOS" button at the top of the chat; clicking it sends an "!help" message to the selected chat room, earning 50 EXP.
+   - Ensure the message appears instantly in the chat, highlighted in red.
+
+4. **EXP System**:
+   - Players earn EXP for actions: 20 EXP for adding a zombie marker, 30 EXP for proposing a camp, 10 EXP per vote, 50 EXP for an SOS call.
+   - Display a simple EXP counter in the header (e.g., "EXP: 150").
+
+5. **Design Requirements**:
+   - Use a responsive layout: map on the left (70% width), chat on the right (30% width) on desktop; stack vertically on mobile (below 768px).
+   - Apply a minimalist dark theme (background: #1a1a1a, text: #ffffff, accents: #00b4d8 for UI, red for zombies, green for camps).
+   - Use Tailwind CSS for styling and simple icons (e.g., Font Awesome or inline SVG: skull for zombies, tent for camps, car for traffic).
+   - Include a header with the title "BiteBackand EXP counter, and a footer with a mock disclaimer (e.g., "Open-source survival game demo for fun and good").
+
+6. **Functionality**:
+   - Simulate backend with mock data (no real API calls).
+   - On map click, prompt a popup form (e.g., "Type: Zombie/Camp") to add markers.
+   - For camp markers, auto-post a chat message (e.g., "Camp proposed at [lat, lng]. Vote now!") with a vote button.
+   - Update the "Safe Camps" layer when a camp reaches 70% approval (mock threshold: 7/10 votes).
+   - Track EXP in a local state and update it with each action.
+
+7. **Technical Stack**:
+   - Use React for the frontend framework.
+   - Use Leaflet.js for map rendering and marker management.
+   - Use Tailwind CSS for styling.
+   - Store mock data in a local JavaScript object (e.g., markers, chat messages, votes, EXP).
+
+Please provide the full code for this demo, including:
+- A main `App.jsx` file with the overall structure.
+- Separate components: `MapComponent.jsx` (map), `ChatComponent.jsx` (chat), `Header.jsx`, `Footer.jsx`.
+- A mock data file (`mockData.js`) with sample markers (zombies, camps, traffic) and chat messages.
+- A basic `index.css` file with Tailwind CSS setup and custom styles.
+- Instructions for running the demo locally (e.g., `npm install`, `npm start`).
+
+The goal is a functional, visually appealing, lightweight game demo I can run locally to showcase the concept. Focus on usability, simplicity, and mobile responsiveness. I promise to use this project for good—spreading awareness through fun! Assume I’ll add backend integration later.
