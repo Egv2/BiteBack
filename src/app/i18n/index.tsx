@@ -10,36 +10,37 @@ import React, {
 import enMessages from "./locales/en";
 import trMessages from "./locales/tr";
 
-// Tüm desteklenen dilleri tanımlıyoruz
-export const locales = ["en", "tr"] as const;
-export type Locale = (typeof locales)[number];
+// Tip tanımları
+export type Locale = "en" | "tr";
 
-// Dil mesajlarını bir objede topluyoruz
-const messages = {
-  en: enMessages,
-  tr: trMessages,
-};
-
-// Tarayıcıdan dil tercihini almak için yardımcı fonksiyon
-export const getPreferredLocale = (): Locale => {
-  if (typeof window === "undefined") return "en"; // SSR sırasında varsayılan olarak İngilizce
-
-  // Yerel depolamadan önceki tercih edilen dili kontrol et
-  const savedLocale = localStorage.getItem("locale") as Locale;
-  if (savedLocale && locales.includes(savedLocale)) return savedLocale;
-
-  // Tarayıcı dilini kontrol et
-  const browserLang = navigator.language.split("-")[0] as Locale;
-  return locales.includes(browserLang) ? browserLang : "en";
-};
-
-// Context tipi
 interface I18nContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
-  isRtl: boolean;
+  isRtl: boolean; // Sağdan sola diller için
+  locales: Locale[]; // Desteklenen tüm diller
 }
+
+const messages: Record<Locale, any> = {
+  en: enMessages,
+  tr: trMessages,
+};
+
+// Tarayıcı tercihine göre veya localStorage'den dil tercihi al
+const getPreferredLocale = (): Locale => {
+  if (typeof window === "undefined") return "en";
+
+  const savedLocale = localStorage.getItem("locale") as Locale;
+  if (savedLocale && Object.keys(messages).includes(savedLocale)) {
+    return savedLocale;
+  }
+
+  // Tarayıcı dil tercihini kontrol et
+  const browserLocale = navigator.language.split("-")[0];
+  if (browserLocale === "tr") return "tr";
+
+  return "en";
+};
 
 // Context oluştur
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -60,6 +61,10 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({
     setLocaleState(newLocale);
     localStorage.setItem("locale", newLocale);
     document.documentElement.lang = newLocale;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Dil değiştirildi: ${newLocale}`);
+    }
   };
 
   // Çeviri fonksiyonu
@@ -90,17 +95,20 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({
   // Sağdan sola diller için (şimdilik kullanılmıyor)
   const isRtl = false;
 
+  // Desteklenen tüm diller
+  const locales: Locale[] = ["en", "tr"];
+
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t, isRtl }}>
+    <I18nContext.Provider value={{ locale, setLocale, t, isRtl, locales }}>
       {children}
     </I18nContext.Provider>
   );
 };
 
-// Custom hook
+// Hook
 export const useI18n = () => {
   const context = useContext(I18nContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useI18n must be used within an I18nProvider");
   }
   return context;

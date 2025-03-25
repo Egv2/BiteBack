@@ -13,11 +13,18 @@ import L, { LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGameState } from "@/app/context/GameStateContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSkull, faTent, faCar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSkullCrossbones,
+  faCampground,
+  faCar,
+  faFlask,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { City, MarkerType } from "@/app/types";
 import { devLog } from "@/app/utils/logger";
 import ChemicalOverlay from "./ChemicalOverlay";
 import EnvironmentalPopup from "./EnvironmentalPopup";
+import ReactDOMServer from "react-dom/server";
 
 // Fix for Leaflet icons in Next.js
 const fixLeafletIcons = () => {
@@ -69,38 +76,63 @@ const createMarkerIcon = (type: MarkerType) => {
     }
   };
 
+  // Get icon for marker type
+  const getIcon = () => {
+    switch (type) {
+      case "zombie":
+        return faSkullCrossbones;
+      case "camp":
+        return faCampground;
+      case "traffic":
+        return faCar;
+      case "chemical":
+        return faFlask;
+      default:
+        return faMapMarkerAlt;
+    }
+  };
+
   // Marker görsel iyileştirmeleri
   const getIconHtml = () => {
+    // Get the FontAwesome icon from React component
+    const iconSvg = ReactDOMServer.renderToString(
+      <FontAwesomeIcon
+        icon={getIcon()}
+        style={{ color: getColor() }}
+        className="fa-lg"
+      />
+    );
+
     switch (type) {
       case "zombie":
         return `
           <div class="marker-icon zombie-marker">
             <div class="marker-pulse"></div>
-            <div class="marker-symbol">💀</div>
+            <div class="marker-symbol">${iconSvg}</div>
           </div>
         `;
       case "camp":
         return `
           <div class="marker-icon camp-marker">
             <div class="marker-glow"></div>
-            <div class="marker-symbol">⛺</div>
+            <div class="marker-symbol">${iconSvg}</div>
           </div>
         `;
       case "traffic":
         return `
           <div class="marker-icon traffic-marker">
-            <div class="marker-symbol">🚗</div>
+            <div class="marker-symbol">${iconSvg}</div>
           </div>
         `;
       case "chemical":
         return `
           <div class="marker-icon chemical-marker">
             <div class="marker-pulse"></div>
-            <div class="marker-symbol">☣️</div>
+            <div class="marker-symbol">${iconSvg}</div>
           </div>
         `;
       default:
-        return `<div class="marker-symbol">📍</div>`;
+        return `<div class="marker-symbol">${iconSvg}</div>`;
     }
   };
 
@@ -147,7 +179,7 @@ const MapClickHandler = () => {
             setModalPosition(null);
           }}
         >
-          <FontAwesomeIcon icon={faSkull} className="mr-2" />
+          <FontAwesomeIcon icon={faSkullCrossbones} className="mr-2" />
           Zombi
         </button>
 
@@ -165,7 +197,7 @@ const MapClickHandler = () => {
             setModalPosition(null);
           }}
         >
-          <FontAwesomeIcon icon={faTent} className="mr-2" />
+          <FontAwesomeIcon icon={faCampground} className="mr-2" />
           Kamp
         </button>
 

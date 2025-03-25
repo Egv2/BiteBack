@@ -245,7 +245,7 @@ const ChatComponent: React.FC = () => {
         </div>
       </div>
 
-      {/* SOS Dialog - Glass Morphism Tasarım */}
+      {/* SOS Dialog - Sayfa ortasında daha iyi hizalanmış */}
       <AnimatePresence>
         {isSosDialogOpen && (
           <>
@@ -258,82 +258,80 @@ const ChatComponent: React.FC = () => {
               onClick={() => setIsSosDialogOpen(false)}
             />
 
-            {/* SOS Dialog */}
+            {/* SOS Dialog - Ortada ve responsive */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50"
+              className="fixed left-0 right-0 top-1/2 transform -translate-y-1/2 mx-auto w-[min(90%,450px)] max-w-full z-50"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative bg-gray-900/90 backdrop-blur-xl p-5 rounded-lg border border-red-700/30 shadow-xl shadow-red-900/20">
-                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg">
+              <div className="relative bg-gray-900/90 backdrop-blur-xl p-4 md:p-5 rounded-lg border border-red-700/30 shadow-xl shadow-red-900/20">
+                <div className="absolute -top-5 md:-top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg">
                   <FontAwesomeIcon icon={faExclamation} size="lg" />
                 </div>
 
                 <button
                   onClick={() => setIsSosDialogOpen(false)}
-                  className="absolute top-3 right-3 text-gray-400 hover:text-white"
+                  className="absolute top-2 right-2 text-gray-400 hover:text-white"
                 >
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
 
-                <form onSubmit={handleSosSubmit}>
-                  <div className="mt-3">
-                    <h3 className="text-xl font-bold text-center text-red-500 mb-1 flex items-center justify-center">
+                <form onSubmit={handleSosSubmit} className="mt-2">
+                  <h3 className="text-lg font-bold text-center text-red-500 mb-1 flex items-center justify-center">
+                    <FontAwesomeIcon
+                      icon={faExclamationTriangle}
+                      className="mr-2"
+                    />
+                    {t("sos.title")}
+                  </h3>
+                  <div className="text-xs text-gray-400 text-center mb-3">
+                    {t("sos.description")}
+                  </div>
+
+                  <div className="flex items-center mb-3 bg-red-900/10 p-2 rounded-lg border border-red-700/20">
+                    <FontAwesomeIcon
+                      icon={faRadio}
+                      className="text-red-400 mr-2"
+                    />
+                    <div className="text-xs text-red-300">
+                      {t("sos.broadcastWarning")}
+                    </div>
+                  </div>
+
+                  <textarea
+                    ref={sosInputRef}
+                    value={sosMessage}
+                    onChange={(e) => setSosMessage(e.target.value)}
+                    className="w-full bg-gray-800/70 border border-red-700/30 text-white p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500/50 text-sm mb-4 min-h-[80px]"
+                    placeholder={t("sos.messagePlaceholder")}
+                  ></textarea>
+
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setIsSosDialogOpen(false)}
+                      className="px-3 py-1.5 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 text-sm"
+                    >
+                      {t("common.cancel")}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!sosMessage.trim()}
+                      className={`px-3 py-1.5 ${
+                        sosMessage.trim()
+                          ? "bg-red-700 hover:bg-red-600"
+                          : "bg-red-900/50 cursor-not-allowed"
+                      } text-white rounded-md text-sm flex items-center`}
+                    >
                       <FontAwesomeIcon
                         icon={faExclamationTriangle}
                         className="mr-2"
                       />
-                      {t("sos.title")}
-                    </h3>
-                    <div className="text-sm text-gray-400 text-center mb-3">
-                      {t("sos.description")}
-                    </div>
-
-                    <div className="flex items-center mb-3 bg-red-900/10 p-2 rounded-lg border border-red-700/20">
-                      <FontAwesomeIcon
-                        icon={faRadio}
-                        className="text-red-400 mr-2"
-                      />
-                      <div className="text-xs text-red-300">
-                        {t("sos.broadcastWarning")}
-                      </div>
-                    </div>
-
-                    <textarea
-                      ref={sosInputRef}
-                      value={sosMessage}
-                      onChange={(e) => setSosMessage(e.target.value)}
-                      className="w-full bg-gray-800/70 border border-red-700/30 text-white p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500/50 text-sm mb-4 min-h-[100px]"
-                      placeholder={t("sos.messagePlaceholder")}
-                    ></textarea>
-
-                    <div className="flex justify-between">
-                      <button
-                        type="button"
-                        onClick={() => setIsSosDialogOpen(false)}
-                        className="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 text-sm"
-                      >
-                        {t("common.cancel")}
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={!sosMessage.trim()}
-                        className={`px-4 py-2 ${
-                          sosMessage.trim()
-                            ? "bg-red-700 hover:bg-red-600"
-                            : "bg-red-900/50 cursor-not-allowed"
-                        } text-white rounded-md text-sm flex items-center`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faExclamationTriangle}
-                          className="mr-2"
-                        />
-                        {t("sos.send")}
-                      </button>
-                    </div>
+                      {t("sos.send")}
+                    </button>
                   </div>
                 </form>
               </div>

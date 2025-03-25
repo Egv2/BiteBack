@@ -36,6 +36,9 @@ export interface ChatMessage {
   campId?: string; // Related camp ID if applicable
 }
 
+// Rank tipi tanımı
+export type Rank = "novice" | "survivor" | "ranger" | "defender" | "elite";
+
 // Game state
 export interface GameState {
   exp: number;
@@ -49,6 +52,7 @@ export interface GameState {
   events?: GameEvent[];
   currentCity: City;
   zombieAlertActive?: boolean;
+  rank?: Rank; // Rank eklendi (opsiyonel)
 }
 
 // City data

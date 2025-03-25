@@ -10,6 +10,12 @@
   --zombie-color: 239, 68, 68;
   --camp-color: 34, 197, 94;
   --traffic-color: 168, 85, 247;
+  --background-color: #111827;
+  --text-color: #ffffff;
+  --card-background: rgba(31, 41, 55, 0.8);
+  --border-color: rgba(55, 65, 81, 0.5);
+  --secondary-accent: #4b5563;
+  --hover-color: #374151;
 }
 
 body {
@@ -18,6 +24,11 @@ body {
 
 .glass-panel {
   @apply bg-gray-900/40 backdrop-blur-md border border-gray-800/50 rounded-lg shadow-lg;
+  background-color: var(--card-background);
+  backdrop-filter: blur(8px);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .glass-button {
@@ -324,16 +335,24 @@ body {
 .marker-icon {
   position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
 }
 
 .marker-symbol {
-  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(20, 20, 20, 0.8);
+  border-radius: 50%;
+  position: relative;
   z-index: 10;
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.7));
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  border: 2px solid currentColor;
 }
 
 .marker-pulse {
@@ -391,6 +410,30 @@ body {
   }
 }
 
+.zombie-marker .marker-symbol {
+  border-color: #ff4d4d;
+}
+
+.camp-marker .marker-symbol {
+  border-color: #4caf50;
+}
+
+.traffic-marker .marker-symbol {
+  border-color: #9c27b0;
+}
+
+.chemical-marker .marker-symbol {
+  border-color: #ffbb00;
+}
+
+/* Optimize for devices with reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marker-icon .marker-pulse,
+  .marker-icon .marker-glow {
+    animation: none !important;
+  }
+}
+
 /* HUD panel styles */
 .glass-button {
   background: rgba(30, 41, 59, 0.8);
@@ -417,15 +460,6 @@ body {
   }
   100% {
     filter: drop-shadow(0 0 1px currentColor);
-  }
-}
-
-/* Erişilebilirlik iyileştirmeleri */
-@media (prefers-reduced-motion: reduce) {
-  .animate-pulse-glow,
-  .marker-pulse,
-  .marker-glow {
-    animation: none !important;
   }
 }
 
@@ -726,17 +760,29 @@ header,
   }
 }
 
-/* Mobil için modal ve popup ayarlamaları */
+/* Mobil için dialog ve modal ayarlamaları */
 @media (max-width: 768px) {
   .help-modal,
-  .notification-panel {
-    width: 90% !important;
+  .sos-dialog {
+    width: calc(100% - 16px) !important;
     max-height: 80vh !important;
-    overflow-y: auto !important;
+    margin: 0 8px !important;
   }
 
+  /* Modal içeriklerinin mobilde daha kompakt olması için */
   .glass-panel {
-    backdrop-filter: blur(5px);
+    padding: 1rem;
+  }
+
+  .modal-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* Mobilde overflow scroll */
+  .modal-scrollable {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 }
 
@@ -756,5 +802,99 @@ header,
 @media (min-width: 1024px) {
   .responsive-container {
     max-width: 80%;
+  }
+}
+
+/* SOS dialog için iyileştirmeler */
+.sos-dialog-content {
+  width: min(90%, 450px);
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Mobil için, help sayfası tüm ekranı kaplayacak */
+@media (max-width: 768px) {
+  .full-screen-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background-color: #111827;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  .mobile-back-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #111827;
+    border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Tema değişimi için stiller */
+.light-theme {
+  --background-color: #f3f4f6;
+  --text-color: #1f2937;
+  --card-background: rgba(255, 255, 255, 0.9);
+  --border-color: rgba(209, 213, 219, 0.8);
+  --accent-color: #0284c7;
+  --secondary-accent: #9ca3af;
+  --hover-color: #e5e7eb;
+}
+
+.dark-theme {
+  --background-color: #111827;
+  --text-color: #ffffff;
+  --card-background: rgba(31, 41, 55, 0.8);
+  --border-color: rgba(55, 65, 81, 0.5);
+  --accent-color: #00b4d8;
+  --secondary-accent: #4b5563;
+  --hover-color: #374151;
+}
+
+.theme-container {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Settings modal için özel stillemeler */
+.settings-modal {
+  max-width: 550px;
+  background-color: var(--card-background);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Özel scrollbar (responsive) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.8);
+}
+
+/* Responsive ayarlar */
+@media (max-width: 768px) {
+  .settings-modal {
+    max-width: 95%;
   }
 }

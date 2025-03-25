@@ -19,6 +19,7 @@ interface MobileMenuProps {
   isChatOpen: boolean;
   toggleInventory: () => void;
   toggleHelp: () => void;
+  toggleSettings: () => void;
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
@@ -28,6 +29,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   isChatOpen,
   toggleInventory,
   toggleHelp,
+  toggleSettings,
 }) => {
   const { t } = useI18n();
 
@@ -87,9 +89,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         className={`mobile-menu-button ${
           activeSection === "settings" ? "active" : ""
         }`}
-        onClick={() => handleButtonClick("settings", () => {})}
+        onClick={() => handleButtonClick("settings", toggleSettings)}
       >
-        <FontAwesomeIcon icon={faCog} className="text-gray-400" />
+        <FontAwesomeIcon
+          icon={faCog}
+          className={
+            activeSection === "settings" ? "text-blue-400" : "text-gray-400"
+          }
+        />
         <span>{t("mobileMenu.settings")}</span>
       </button>
     </div>

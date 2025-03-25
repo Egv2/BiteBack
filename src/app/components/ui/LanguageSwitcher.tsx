@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useI18n, Locale, locales } from "@/app/i18n";
+import { useI18n, Locale } from "@/app/i18n";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
@@ -18,7 +18,7 @@ const localeFlags: Record<Locale, string> = {
 };
 
 const LanguageSwitcher: React.FC = () => {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale, locales } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
 
   return (

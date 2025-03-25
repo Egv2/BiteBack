@@ -15,6 +15,7 @@ import {
   ChemicalZone,
   ChemicalType,
   GameNotification,
+  Rank,
 } from "../types";
 import {
   initialMarkers,
@@ -29,6 +30,8 @@ import {
 } from "../data/mockData";
 import { v4 as uuidv4 } from "uuid";
 import { useI18n } from "@/app/i18n";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 
 interface GameStateContextProps {
   gameState: GameState;
@@ -62,16 +65,30 @@ const GameStateContext = createContext<GameStateContextProps | undefined>(
   undefined
 );
 
+const calculateRank = (exp: number): Rank => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(`Calculating rank for XP: ${exp}`);
+  }
+
+  if (exp >= 1001) return "elite";
+  if (exp >= 601) return "defender";
+  if (exp >= 301) return "ranger";
+  if (exp >= 101) return "survivor";
+  return "novice";
+};
+
 export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // Track state
+  const { t } = useI18n();
+
   const [gameState, setGameState] = useState<GameState>({
     exp: initialExp,
     inventory: initialInventory,
     currentRoom: defaultCity.name,
     playerId: defaultSurvivorId,
     currentCity: defaultCity,
+    rank: calculateRank(initialExp),
   });
 
   const [markers, setMarkers] = useState<Marker[]>(initialMarkers);
@@ -81,10 +98,8 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
   const [safeCampsOnly, setSafeCampsOnly] = useState<boolean>(false);
   const [chemicalZones, setChemicalZones] = useState<ChemicalZone[]>([]);
   const [notifications, setNotifications] = useState<GameNotification[]>([]);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  const { t } = useI18n();
-
-  // Console log for tracking state changes in development
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("GameState updated:", gameState);
@@ -93,7 +108,16 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [gameState, markers, chatMessages]);
 
-  // Add a new marker to the map
+  useEffect(() => {
+    const newRank = calculateRank(gameState.exp);
+    if (newRank !== gameState.rank) {
+      if (process.env.NODE_ENV === "development") {
+        console.log(`Rank changed from ${gameState.rank} to ${newRank}`);
+      }
+      setGameState((prev) => ({ ...prev, rank: newRank }));
+    }
+  }, [gameState.exp, gameState.rank]);
+
   const addMarker = (marker: Omit<Marker, "id" | "createdAt">): string => {
     const newMarkerId = uuidv4();
     const newMarker: Marker = {
@@ -104,7 +128,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
 
     setMarkers((prev) => [...prev, newMarker]);
 
-    // Add EXP based on marker type
     if (marker.type === "zombie") {
       updateExp(expValues.addZombie);
       console.log(`Added zombie marker, earned ${expValues.addZombie} EXP`);
@@ -112,7 +135,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
       updateExp(expValues.proposeCamp);
       console.log(`Proposed camp, earned ${expValues.proposeCamp} EXP`);
 
-      // Auto-post a chat message for the camp
       const campMessage: Omit<ChatMessage, "id" | "timestamp" | "sender"> = {
         room: currentCity.name,
         content: `Safe camp proposed at [${marker.position[0].toFixed(
@@ -131,7 +153,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     return newMarkerId;
   };
 
-  // Add a new chat message
   const addChatMessage = (
     message: Omit<ChatMessage, "id" | "timestamp" | "sender">
   ): string => {
@@ -143,20 +164,18 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
       sender: gameState.playerId,
     };
 
-    setChatMessages((prev) => [...prev, newMessage]);
+    setChatMessages((prev: ChatMessage[]) => [...prev, newMessage]);
     console.log("Added new chat message:", newMessage);
 
     return newMessageId;
   };
 
-  // Vote for a camp
   const voteForCamp = (campId: string) => {
-    // Update the marker
     setMarkers((prev) =>
       prev.map((marker) => {
         if (marker.id === campId && marker.type === "camp") {
           const newVotes = (marker.votes || 0) + 1;
-          const approved = newVotes >= (marker.maxVotes || 10) * 0.7; // 70% approval
+          const approved = newVotes >= (marker.maxVotes || 10) * 0.7;
 
           console.log(
             `Voted for camp ${campId}, new votes: ${newVotes}, approved: ${approved}`
@@ -172,9 +191,8 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
       })
     );
 
-    // Update the chat message
-    setChatMessages((prev) =>
-      prev.map((msg) => {
+    setChatMessages((prev: ChatMessage[]) =>
+      prev.map((msg: ChatMessage) => {
         if (msg.campId === campId) {
           const newVotes = (msg.votes || 0) + 1;
           return {
@@ -186,12 +204,10 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
       })
     );
 
-    // Add EXP for voting
     updateExp(expValues.vote);
     console.log(`Voted for camp, earned ${expValues.vote} EXP`);
   };
 
-  // Request an item
   const requestItem = (itemType: string) => {
     const message: Omit<ChatMessage, "id" | "timestamp" | "sender"> = {
       room: gameState.currentRoom,
@@ -206,7 +222,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
-  // Send an SOS message
   const sendSOS = (content: string) => {
     const message: Omit<ChatMessage, "id" | "timestamp" | "sender"> = {
       room: gameState.currentRoom,
@@ -219,15 +234,36 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     console.log(`Sent SOS message, earned ${expValues.sosCall} EXP`);
   };
 
-  // Update game experience points
-  const updateExp = (amount: number) => {
-    setGameState((prev) => ({
-      ...prev,
-      exp: prev.exp + amount,
-    }));
+  const showNotification = (
+    notification: Omit<GameNotification, "id" | "createdAt">
+  ) => {
+    addNotification(notification);
   };
 
-  // Change chat room
+  const updateExp = (amount: number) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Updating EXP by ${amount}, current: ${gameState.exp}`);
+    }
+
+    const oldExp = gameState.exp;
+    const newExp = Math.max(0, oldExp + amount);
+    const oldRank = calculateRank(oldExp);
+    const newRank = calculateRank(newExp);
+
+    setGameState((prev) => ({ ...prev, exp: newExp }));
+
+    if (newRank !== oldRank && amount > 0) {
+      showNotification({
+        title: t("notifications.levelUp"),
+        message: t("notifications.rankChanged", {
+          rank: t(`ranks.${newRank}`),
+        }),
+        type: "success",
+        duration: 5000,
+      });
+    }
+  };
+
   const changeRoom = (roomName: string) => {
     setGameState((prev) => ({
       ...prev,
@@ -236,7 +272,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     console.log(`Changed room to ${roomName}`);
   };
 
-  // Change current city
   const changeCity = (city: City) => {
     setCurrentCity(city);
     changeRoom(city.name);
@@ -245,23 +280,18 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
-  // Toggle safe camps only view
   const toggleSafeCampsOnly = () => {
     setSafeCampsOnly((prev) => !prev);
     console.log(`Toggled safe camps only view: ${!safeCampsOnly}`);
   };
 
-  // Simulate random zombie spawns
   useEffect(() => {
-    // Only for demonstration purposes - don't spam in production
     if (process.env.NODE_ENV !== "development") return;
 
     console.log("Setting up random zombie spawner");
 
     const interval = setInterval(() => {
-      // Random chance to spawn a zombie (10% chance every 30 seconds)
       if (Math.random() < 0.1) {
-        // Spawn near current city with some randomness
         const lat = currentCity.position[0] + (Math.random() - 0.5) * 0.05;
         const lng = currentCity.position[1] + (Math.random() - 0.5) * 0.05;
 
@@ -274,15 +304,14 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
         addMarker(randomZombie);
         console.log("Random zombie spawned:", randomZombie);
       }
-    }, 30000); // Every 30 seconds
+    }, 30000);
 
     return () => {
       clearInterval(interval);
       console.log("Zombie spawner cleanup");
     };
-  }, [currentCity, addMarker]);
+  }, [currentCity]);
 
-  // Kimyasal bölge ekle
   const addChemicalZone = (
     zone: Omit<ChemicalZone, "id" | "createdAt">
   ): string => {
@@ -300,7 +329,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
       }, ${zone.position[1]}]`
     );
 
-    // Kimyasal tehdit bildirimi ekle
     addNotification({
       type: "warning",
       title: t("notifications.chemicalDetected"),
@@ -311,13 +339,11 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     return newZoneId;
   };
 
-  // Kimyasal bölgeyi temizle
   const clearChemicalZone = (zoneId: string) => {
     setChemicalZones((prev) => prev.filter((zone) => zone.id !== zoneId));
     console.log(`Cleared chemical zone: ${zoneId}`);
   };
 
-  // Kimyasal türüne göre isim al
   const getChemicalName = (type: ChemicalType): string => {
     switch (type) {
       case "tearGas":
@@ -333,17 +359,15 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // Süresi geçmiş kimyasal bölgeleri temizle
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
       setChemicalZones((prev) => prev.filter((zone) => zone.expiresAt > now));
-    }, 30000); // Her 30 saniyede bir kontrol et
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // Bildirim ekle
   const addNotification = (
     notification: Omit<GameNotification, "id" | "createdAt">
   ): string => {
@@ -356,7 +380,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
 
     setNotifications((prev) => [...prev, newNotification]);
 
-    // Dev ortamında konsola bilgi ver
     if (process.env.NODE_ENV === "development") {
       console.log(`Notification added: ${newNotification.title}`);
     }
@@ -364,12 +387,10 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
     return id;
   };
 
-  // Bildirimi kaldır
   const clearNotification = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  // Otomatik bildirim temizleme
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
@@ -380,6 +401,10 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
 
     return () => clearInterval(interval);
   }, []);
+
+  const toggleSettings = () => {
+    setIsSettingsOpen(!isSettingsOpen);
+  };
 
   return (
     <GameStateContext.Provider
@@ -412,7 +437,6 @@ export const GameStateProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// Custom hook to use the game state
 export const useGameState = () => {
   const context = useContext(GameStateContext);
   if (context === undefined) {

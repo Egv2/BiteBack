@@ -8,6 +8,7 @@ import {
   faMapMarkerAlt,
   faBoxOpen,
   faQuestionCircle,
+  faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import Inventory from "./Inventory";
 import { useI18n } from "@/app/i18n";
@@ -15,13 +16,15 @@ import { useI18n } from "@/app/i18n";
 interface HeaderProps {
   toggleInventory: () => void;
   isInventoryOpen: boolean;
-  toggleHelp?: () => void;
+  toggleHelp: () => void;
+  toggleSettings: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   toggleInventory,
   isInventoryOpen,
   toggleHelp,
+  toggleSettings,
 }) => {
   const { gameState } = useGameState();
   const { t } = useI18n();
@@ -60,43 +63,41 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      <div className="flex items-center space-x-2 md:space-x-4">
-        {/* EXP counter */}
-        <div className="bg-gray-800/80 px-2 py-1 rounded-md text-xs md:text-sm flex items-center border border-gray-700/50">
-          <span className="text-white font-medium mr-1">
-            {t("header.exp")}:
-          </span>
-          <span className="text-[#00b4d8]">{gameState.exp || 0}</span>
+      <div className="flex items-center">
+        {/* XP Göstergesi */}
+        <div className="flex items-center mr-3 bg-gray-800/70 px-2 py-1 rounded-md">
+          <div className="mr-1 text-xs font-mono text-yellow-400">XP</div>
+          <span className="text-white">{gameState.exp}</span>
+          {gameState.rank && (
+            <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-blue-900/50 text-blue-300">
+              {t(`ranks.${gameState.rank}`)}
+            </span>
+          )}
         </div>
 
-        {/* Player ID */}
-        <div className="bg-gray-800/80 px-2 py-1 rounded-md text-xs md:text-sm flex items-center border border-gray-700/50">
-          <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-1" />
-          <span className="text-gray-300">
-            {gameState.playerId?.substring(0, 8) || "Survivor"}
-          </span>
-        </div>
-
-        {/* Desktop'ta envanter butonu */}
+        {/* Sadece desktop'ta görünecek butonlar */}
         {windowWidth >= 768 && (
-          <div className="hidden md:block">
-            <Inventory isOpen={isInventoryOpen} onClose={toggleInventory} />
-          </div>
+          <>
+            <button
+              onClick={toggleHelp}
+              className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 mr-2"
+              aria-label={t("help.title")}
+            >
+              <FontAwesomeIcon icon={faQuestionCircle} />
+            </button>
+
+            <button
+              onClick={toggleSettings}
+              className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 mr-2"
+              aria-label={t("settings.title")}
+            >
+              <FontAwesomeIcon icon={faCog} />
+            </button>
+          </>
         )}
 
-        {/* Desktop'ta yardım butonu */}
-        {windowWidth >= 768 && toggleHelp && (
-          <button
-            onClick={toggleHelp}
-            className="glass-button p-2 rounded-md"
-            aria-label="Yardım"
-          >
-            <FontAwesomeIcon
-              icon={faQuestionCircle}
-              className="text-[#00b4d8]"
-            />
-          </button>
-        )}
+        {/* Envanter */}
+        <Inventory isOpen={isInventoryOpen} onClose={toggleInventory} />
       </div>
     </header>
   );
