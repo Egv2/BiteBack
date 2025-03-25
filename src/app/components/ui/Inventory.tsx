@@ -32,9 +32,13 @@ const useItemActions = () => {
   return { handleItemUse };
 };
 
-const Inventory: React.FC = () => {
+interface InventoryProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Inventory: React.FC<InventoryProps> = ({ isOpen, onClose }) => {
   const { gameState } = useGameState();
-  const [isOpen, setIsOpen] = useState(false);
   const { t } = useI18n();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "count">("name");
@@ -179,13 +183,15 @@ const Inventory: React.FC = () => {
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className="relative z-40">
       <button
         className={`px-3 py-1.5 rounded-md flex items-center bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors duration-200 ${
           lowSupplies.length > 0 ? "border-yellow-600/50" : ""
         } ${showPulse ? "animate-pulse" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onClose}
         aria-label={t(isOpen ? "inventory.hide" : "inventory.show")}
       >
         <FontAwesomeIcon
@@ -218,7 +224,7 @@ const Inventory: React.FC = () => {
                 {t("inventory.title")}
               </h3>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={onClose}
                 className="text-gray-400 hover:text-white"
               >
                 <FontAwesomeIcon icon={faTimes} />
@@ -335,7 +341,7 @@ const Inventory: React.FC = () => {
             {/* Mobil görünümde daha büyük kapatma butonu */}
             {screenSize === "mobile" && (
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={onClose}
                 className="mt-3 w-full py-2 bg-gray-700 hover:bg-gray-600 rounded-md text-sm text-gray-300"
               >
                 {t("common.close")}
