@@ -3,11 +3,11 @@ const enTranslations = {
     title: "BiteBack",
     description:
       "Simulation game for survival coordination in a zombie outbreak",
+    loading: "Loading...",
   },
   common: {
     cancel: "Cancel",
     submit: "Submit",
-    loading: "Loading...",
     error: "An error occurred",
     save: "Save",
     delete: "Delete",
@@ -66,6 +66,10 @@ const enTranslations = {
     messagePlaceholder: "Describe your emergency situation in detail...",
     broadcastWarning:
       "This message will be broadcast to all survivors and may attract zombies in the area!",
+    helpPrefix: "!help",
+    backupNeeded: "Need backup",
+    immediately: "immediately",
+    near: "near",
   },
   items: {
     request: "Request an item:",
@@ -298,6 +302,17 @@ const enTranslations = {
     rename: "Rename",
     resetToDefaults: "Reset to Defaults",
     save: "Save",
+  },
+  emergencyMessages: {
+    zombieNearLocation:
+      "!help Zombies near {location}! Need backup immediately!",
+    injuredSurvivor: "!help Injured survivor at {location}! Need medkit!",
+    resourceShortage:
+      "!help Running low on supplies at {location}! Need food and medicine!",
+    zombieHorde:
+      "!help Large zombie horde approaching {location}! Evacuate immediately!",
+    trapSituation:
+      "!help Trapped in {location}! Zombies surrounding the building!",
   },
 };
 

@@ -63,6 +63,47 @@ export const initialMarkers: Marker[] = [
     details: "Survivor caravan with supplies",
     createdAt: Date.now() - 900000, // 15 minutes ago
   },
+  {
+    id: uuidv4(),
+    type: "zombie",
+    position: [41.0161, 28.9548],
+    details: "Saraçhane İBB binası etrafında büyük zombi sürüsü",
+    createdAt: Date.now() - 1200000, // 20 dakika önce
+  },
+  {
+    id: uuidv4(),
+    type: "zombie",
+    position: [41.0176, 28.9552],
+    details: "Fatih Belediyesi yanında 5 zombi görüldü",
+    createdAt: Date.now() - 3000000, // 50 dakika önce
+  },
+  {
+    id: uuidv4(),
+    type: "camp",
+    position: [41.0165, 28.952],
+    details: "Vefa'da güvenli kamp, su ve gıda mevcut",
+    votes: 7,
+    maxVotes: 10,
+    approved: false,
+    createdAt: Date.now() - 5400000, // 1.5 saat önce
+  },
+  {
+    id: uuidv4(),
+    type: "traffic",
+    position: [41.0155, 28.956],
+    details: "İBB'den Aksaray'a doğru silahlı grup hareket halinde",
+    createdAt: Date.now() - 600000, // 10 dakika önce
+  },
+  {
+    id: uuidv4(),
+    type: "camp",
+    position: [41.0187, 28.957],
+    details: "Şehzadebaşı Camii içinde sığınak, ilaç yardımı gerekli",
+    votes: 9,
+    maxVotes: 10,
+    approved: true,
+    createdAt: Date.now() - 9000000, // 2.5 saat önce
+  },
 ];
 
 // Generate a random survivor ID
@@ -143,6 +184,62 @@ export const initialChatMessages: ChatMessage[] = [
     content: "!need food Running low on supplies near Alsancak",
     timestamp: Date.now() - 4500000, // 1.25 hours ago
     type: "request",
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor389",
+    content:
+      "!yardım Saraçhane İBB binasında kısıldık! En az 20 zombi var çevrede!",
+    timestamp: Date.now() - 1800000, // 30 dakika önce
+    type: "emergency",
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor492",
+    content:
+      "Şehzadebaşı Camii'nde güvenli bölge oluşturuldu. İlaç ve su bulunuyor.",
+    timestamp: Date.now() - 9000000, // 2.5 saat önce
+    type: "normal",
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor129",
+    content: "Vefa'da yeni kamp kuruldu [41.0165, 28.9520]. Oy verin!",
+    timestamp: Date.now() - 5400000, // 1.5 saat önce
+    type: "camp",
+    votes: 7,
+    maxVotes: 10,
+    position: [41.0165, 28.952],
+    campId: initialMarkers[initialMarkers.length - 3].id, // Vefa kampının ID'sine dinamik referans
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor256",
+    content:
+      "!need painkiller Saraçhane'de yaralılar var, acil ağrı kesici lazım",
+    timestamp: Date.now() - 1500000, // 25 dakika önce
+    type: "request",
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor811",
+    content:
+      "İBB binasından çıkan bir grup silahlanmış hayatta kalan Aksaray'a doğru gidiyor. Dikkatli olun.",
+    timestamp: Date.now() - 500000, // 8 dakika önce
+    type: "normal",
+  },
+  {
+    id: uuidv4(),
+    room: "Istanbul",
+    sender: "Survivor327",
+    content: "!yardım Vezneciler metro istasyonunda zombi sürüsü! Kaçın!",
+    timestamp: Date.now() - 120000, // 2 dakika önce
+    type: "emergency",
   },
 ];
 

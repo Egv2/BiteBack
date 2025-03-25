@@ -2,12 +2,12 @@ const trTranslations = {
   app: {
     title: "BiteBack",
     description:
-      "Zombi salgınında hayatta kalma koordinasyonu için simülasyon oyunu",
+      "Zombi salgınında hayatta kalma koordinasyonu simülasyon oyunu",
+    loading: "Yükleniyor...",
   },
   common: {
     cancel: "İptal",
     submit: "Gönder",
-    loading: "Yükleniyor...",
     error: "Hata oluştu",
     save: "Kaydet",
     delete: "Sil",
@@ -80,6 +80,10 @@ const trTranslations = {
     messagePlaceholder: "Acil durumunuzu ayrıntılı şekilde açıklayın...",
     broadcastWarning:
       "Bu mesaj tüm hayatta kalanlara iletilecek ve bölgedeki zombileri çekebilir!",
+    helpPrefix: "!yardım",
+    backupNeeded: "Destek gerekli",
+    immediately: "acilen",
+    near: "yakınında",
   },
   items: {
     request: "Malzeme iste:",
@@ -316,6 +320,18 @@ const trTranslations = {
     rename: "İsim Değiştir",
     resetToDefaults: "Varsayılanlara Sıfırla",
     save: "Kaydet",
+  },
+  emergencyMessages: {
+    zombieNearLocation:
+      "!yardım {location} yakınında zombiler! Acilen destek gerekli!",
+    injuredSurvivor:
+      "!yardım {location} konumunda yaralı hayatta kalan! İlk yardım kiti gerekli!",
+    resourceShortage:
+      "!yardım {location} konumunda malzeme sıkıntısı! Yiyecek ve ilaç gerekli!",
+    zombieHorde:
+      "!yardım {location} yakınlarında büyük zombi sürüsü! Acilen tahliye edin!",
+    trapSituation:
+      "!yardım {location} konumunda sıkıştık! Zombiler binayı sardı!",
   },
 };
 
