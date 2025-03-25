@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BiteBack - Hayatta Kalma Koordinasyon Oyunu
 
-## Getting Started
+BiteBack, kriz durumlarında koordinasyon mekanizmalarını simüle eden, hafif, mobil uyumlu bir web tabanlı hayatta kalma oyunudur. Kullanıcıların zombi salgını senaryosunda hayatta kalmak için birlikte çalışmasını sağlar.
 
-First, run the development server:
+## Özellikler
+
+- **Harita Etkileşimi**: OpenStreetMap tabanlı harita üzerinde zombi görüşleri, hayatta kalan kampları ve hareketleri işaretleme
+- **Şehir Bazlı İletişim**: Şehir odalarında hayatta kalanlarla iletişim kurma
+- **Acil Durum Sistemi**: SOS mesajları ve malzeme istekleri gönderme
+- **Oylama Mekanizması**: Güvenli kampları oylayarak onaylama
+- **Deneyim Sistemi**: İşaretleme, oylama ve yardım eylemleri için EXP kazanma
+- **Envanter Sistemi**: Malzemeleri takip etme (ilk yardım kiti, serum, ağrı kesici, yiyecek)
+- **Mobil Uyumluluk**: Responsive tasarım sayesinde tüm cihazlarda sorunsuz çalışma
+
+## Teknoloji Yığını
+
+- **Frontend**: Next.js, React, TypeScript
+- **Harita**: Leaflet.js, OpenStreetMap
+- **Stil**: Tailwind CSS
+- **İkonlar**: Font Awesome
+
+## Başlangıç
+
+Bu projeyi yerel ortamınızda çalıştırmak için:
 
 ```bash
+# Gerekli paketleri yükleme
+npm install
+
+# Geliştirme sunucusunu başlatma
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görebilirsiniz.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Kullanım
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Haritaya tıklayarak zombi görüşleri, kamplar ve hayatta kalan hareketleri ekleyin
+2. Şehir bazlı sohbet odalarıyla iletişim kurun
+3. Acil durumlarda SOS gönderin
+4. Malzeme isteyin ve envanterdeki malzemelerinizi takip edin
+5. Kampları oylayarak onaylayın ve "Sadece Güvenli Kamplar" görünümünü kullanın
 
-## Learn More
+## Katkıda Bulunma
 
-To learn more about Next.js, take a look at the following resources:
+Bu proje açık kaynaklıdır ve katkılarınıza açıktır. Lütfen bir PR göndermeden önce bir issue açarak değişikliklerinizi tartışın.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Lisans
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Bu proje MIT lisansı altında lisanslanmıştır.
 
-## Deploy on Vercel
+## Çok Dillilik Desteği
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+BiteBack birden fazla dili desteklemektedir. Şu anda aşağıdaki diller mevcuttur:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- İngilizce (English)
+- Türkçe
+
+### Yeni Dil Eklemek
+
+Yeni bir dil eklemek için:
+
+1. `src/app/i18n/locales/` klasörüne yeni bir dil dosyası ekleyin
+2. `src/app/i18n/index.ts` dosyasını güncelleyin
+3. `src/app/components/ui/LanguageSwitcher.tsx` dosyasını güncelleyin
+
+Lütfen çevirileri sağlamak için PR gönderin, yeni dil eklemeleri memnuniyetle karşılanmaktadır.
+# BiteBack
