@@ -1,68 +1,60 @@
-# BiteBack - Hayatta Kalma Koordinasyon Oyunu
+BiteBack - Location Based Survival Coordination Game
 
-BiteBack, kriz durumlarında koordinasyon mekanizmalarını simüle eden, hafif, mobil uyumlu bir web tabanlı hayatta kalma oyunudur. Kullanıcıların zombi salgını senaryosunda hayatta kalmak için birlikte çalışmasını sağlar.
+BiteBack is a lightweight, mobile-friendly, web-based survival game that simulates coordination mechanisms in crisis scenarios. It enables users to collaborate and survive together in a zombie outbreak scenario.
 
-## Özellikler
+Features
+	•	Map Interaction: Mark zombie sightings, survivor camps, and movements on an OpenStreetMap-based interactive map
+	•	City-Based Communication: Communicate with other survivors in city-specific chat rooms
+	•	Emergency System: Send SOS messages and resource requests
+	•	Voting Mechanism: Vote to verify safe camps
+	•	Experience System: Earn EXP by marking locations, voting, and helping others
+	•	Inventory System: Track resources like first aid kits, serum, painkillers, and food
+	•	Mobile Compatibility: Fully responsive design for seamless use on all devices
 
-- **Harita Etkileşimi**: OpenStreetMap tabanlı harita üzerinde zombi görüşleri, hayatta kalan kampları ve hareketleri işaretleme
-- **Şehir Bazlı İletişim**: Şehir odalarında hayatta kalanlarla iletişim kurma
-- **Acil Durum Sistemi**: SOS mesajları ve malzeme istekleri gönderme
-- **Oylama Mekanizması**: Güvenli kampları oylayarak onaylama
-- **Deneyim Sistemi**: İşaretleme, oylama ve yardım eylemleri için EXP kazanma
-- **Envanter Sistemi**: Malzemeleri takip etme (ilk yardım kiti, serum, ağrı kesici, yiyecek)
-- **Mobil Uyumluluk**: Responsive tasarım sayesinde tüm cihazlarda sorunsuz çalışma
+Tech Stack
+	•	Frontend: Next.js, React, TypeScript
+	•	Map: Leaflet.js, OpenStreetMap
+	•	Styling: Tailwind CSS
+	•	Icons: Font Awesome
 
-## Teknoloji Yığını
+Getting Started
 
-- **Frontend**: Next.js, React, TypeScript
-- **Harita**: Leaflet.js, OpenStreetMap
-- **Stil**: Tailwind CSS
-- **İkonlar**: Font Awesome
+To run this project locally:
 
-## Başlangıç
-
-Bu projeyi yerel ortamınızda çalıştırmak için:
-
-```bash
-# Gerekli paketleri yükleme
+# Install dependencies
 npm install
 
-# Geliştirme sunucusunu başlatma
+# Start development server
 npm run dev
-```
 
-Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görebilirsiniz.
+Open http://localhost:3000 in your browser to view the app.
 
-## Kullanım
+Usage
+	1.	Click on the map to mark zombie sightings, camps, and survivor movements
+	2.	Communicate with other players via city-based chat rooms
+	3.	Send SOS messages in emergency situations
+	4.	Request supplies and track your inventory
+	5.	Vote to verify camps and use the “Safe Camps Only” view for navigation
 
-1. Haritaya tıklayarak zombi görüşleri, kamplar ve hayatta kalan hareketleri ekleyin
-2. Şehir bazlı sohbet odalarıyla iletişim kurun
-3. Acil durumlarda SOS gönderin
-4. Malzeme isteyin ve envanterdeki malzemelerinizi takip edin
-5. Kampları oylayarak onaylayın ve "Sadece Güvenli Kamplar" görünümünü kullanın
+Contributing
 
-## Katkıda Bulunma
+This project is open source and contributions are welcome. Please open an issue to discuss your changes before submitting a pull request.
 
-Bu proje açık kaynaklıdır ve katkılarınıza açıktır. Lütfen bir PR göndermeden önce bir issue açarak değişikliklerinizi tartışın.
+License
 
-## Lisans
+This project is licensed under the MIT License.
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+Multilingual Support
 
-## Çok Dillilik Desteği
+BiteBack supports multiple languages. Currently available languages:
+	•	English
+	•	Turkish
 
-BiteBack birden fazla dili desteklemektedir. Şu anda aşağıdaki diller mevcuttur:
+Adding a New Language
 
-- İngilizce (English)
-- Türkçe
+To add a new language:
+	1.	Add a new language file under src/app/i18n/locales/
+	2.	Update src/app/i18n/index.ts
+	3.	Update the src/app/components/ui/LanguageSwitcher.tsx component
 
-### Yeni Dil Eklemek
-
-Yeni bir dil eklemek için:
-
-1. `src/app/i18n/locales/` klasörüne yeni bir dil dosyası ekleyin
-2. `src/app/i18n/index.ts` dosyasını güncelleyin
-3. `src/app/components/ui/LanguageSwitcher.tsx` dosyasını güncelleyin
-
-Lütfen çevirileri sağlamak için PR gönderin, yeni dil eklemeleri memnuniyetle karşılanmaktadır.
-# BiteBack
+Please submit a pull request to contribute translations. New language contributions are highly appreciated.
